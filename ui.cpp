@@ -24,20 +24,45 @@ void color(int color) {
 }
 
 void line() {
+    color(13);
     cout << string(WIDTH, '-') << endl;
 }
 
-void emptyLine() {
-    cout << "|" << string(WIDTH - 2, ' ') << "|" << endl;
-    cout << "|" << string(WIDTH - 2, ' ') << "|" << endl;
+void printBorder(const string& content, int textColor = 15) {
+
+    color(13); 
+    cout << "|";
+
+    color(textColor);
+
+    cout << content;
+
+    color(13); 
+    cout << "|" << endl;
+
+    color(7); 
 }
 
-void printCentered(const string& text) {
+
+void printCentered(const string& text, int textColor = 15) {
+
     int padding = (WIDTH - 2 - text.length()) / 2;
-    cout << "|" << string(padding, ' ') << text << string(WIDTH - 2 - padding - text.length(), ' ') << "|" << endl;
+
+    string content =
+        string(padding, ' ') +
+        text +
+        string(WIDTH - 2 - padding - text.length(), ' ');
+
+    printBorder(content, textColor);
+}
+
+void emptyLine() {
+    printBorder(string(WIDTH - 2, ' '));
+    printBorder(string(WIDTH - 2, ' '));
 }
 
 void menuTitle(int select) {
+
     string choice[4] = {
         "S T A R T",
         "T U T O R I A L",
@@ -45,15 +70,23 @@ void menuTitle(int select) {
         "E X I T"
     };
 
-    cout << "|                                                                                    |" << endl;
-    cout << "|                                                                                    |" << endl;
-
     for (int i = 0; i < 4; i++) {
+
         string label = (i == select ? ">> " : "   ") + choice[i];
 
         int padding = WIDTH - 2 - label.length();
-        cout << "|" << string(padding / 2, ' ') << label
-             << string(padding - padding / 2, ' ') << "|" << endl;
+
+        string content =
+            string(padding / 2, ' ') +
+            label +
+            string(padding - padding / 2, ' ');
+
+        int textColor = (i == select) ? 15 : 8;
+
+        printBorder(content, textColor);
+
+        if (i != 3)
+            printBorder(string(WIDTH - 2, ' '), 7);
     }
 
     emptyLine();
@@ -62,18 +95,21 @@ void menuTitle(int select) {
 
 void title() {
     emptyLine();
-    printCentered("____             	  _   ____                   _");
-    printCentered("|  _ | ___   __ _  __| |  / ___|_ __ ___  ___ ___(_)_ ___  __ _ ");
-    printCentered("| |_) / _ | / _` |/ _` | | |   | '__/ _ || __/ __| | '_  |/ _` |");
-    printCentered("|  _ < (_) | (_| | (_| | | |___| | | (_) |__ |__ | | | | | (_| |");
-    printCentered("|_| |_|___/|__,_||__,__| |_____|_| |___/|___/___/|_|_||_||__,  |");
-    printCentered("    	            C h a l l e n g e                        |___/");
-
+    color(11);
+    printCentered("____________________________________________________________________");
+    printCentered("| |  _ | ___   __ _  __| |  / ___|_ __ ___  ___ ___(_)_ ___  __ _  |");
+    printCentered("| | |_) / _ | / _` |/ _` | | |   | '__/ _ || __/ __| | '_  |/ _` | |");
+    printCentered("| |  _ < (_) | (_| | (_| | | |___| | | (_) |__ |__ | | | | | (_| | |");
+    printCentered("| |_| |_|___/|__,_||__,__| |_____|_| |___/|___/___/|_|_||_||__,  | |");
+    printCentered("|    	            C h a l l e n g e                       |___/ |");
+    printCentered("|___________________________________________________________________");
+    color(11);
     emptyLine();
 }
 
 
 void console() {
+    color(15);
     cout << "|                                                                                    |" << endl;
     cout << "|                                                                                    |" << endl;
     cout << "|           ____                  __        __                     ____              |" << endl;
@@ -89,6 +125,7 @@ void console() {
     cout << "|                              (______)  (______)                                    |" << endl;
     cout << "|                                                                                    |" << endl;
     cout << "|                                                                                    |" << endl;
+    color(7);
 }
 
 void draw(int select) {
@@ -193,11 +230,11 @@ int chooseDifficulty(string name) {
             string label;
 
             if (i == selectDifficulty) {
-                color(10);
+                color(15);
                 label = ">> " + diff[i];
             }
             else {
-                color(7);
+                color(8);
                 label = "   " + diff[i];
             }
             
@@ -205,12 +242,16 @@ int chooseDifficulty(string name) {
             int x = (WIDTH / 2) - (label.length() / 2);
 
             // SPACING BETWEEN OPTIONS
-            int y = 16 + i;
+            int y = 16 + (i * 2);
 
             gotoxy(x, y);
 
             cout << label;
         }
+
+        color(7);
+
+        emptyLine();
 
         int key = _getch();
 
